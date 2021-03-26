@@ -70,12 +70,18 @@ fs.createReadStream('steam_csvs/steam_support_info.csv')
         results=[];
     });
 
-// fs.createReadStream('steam_csvs/steamspy_tag_data.csv')
-//     .pipe(csv({}))
-//     .on('data', (data) => results.push(data))
-//     .on('end', () => {
-//         console.log(results);
-//     });
+fs.createReadStream('steam_csvs/steamspy_tag_data.csv')
+    .pipe(csv({}))
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+        results.forEach(result => {
+                compteur++;
+                createSteamTag(result, compteur).catch(console.log);
+            }
+        );
+        compteur=0;
+        results=[];
+    });
 
 async function createSteam(result, id) {
     const { response } = await client.create({
@@ -150,11 +156,14 @@ async function createSteamSupport(result, id) {
     const { response } = await client.create({
         index: 'steam_support_info',
         id: id,
-        body: {
-            steam_appid: result.steam_appid,
-            website: result.website,
-            support_url: result.support_url,
-            support_email: result.support_email,
-        }
+        body: result
+    });
+}
+
+async function createSteamTag(result, id) {
+    const { response } = await client.create({
+        index: 'steam_tag_data',
+        id: id,
+        body: result
     });
 }
