@@ -1,18 +1,23 @@
 <?php
 
+namespace App\Service;
 
-namespace App\Action;
-
-use App\Core\Controller\AbstractController;
 use Elasticsearch\ClientBuilder;
 
-class SteamGame extends AbstractController
+class GamesManager
 {
-    public function __invoke()
-    {
+
+    public function getFirstsGames($pageid){
+
         $games = [];
-        $test = [];
-        for ($i = 1; $i < 100; $i++) {
+
+        if ($pageid == 1){
+            $idgame = 1;
+        } else {
+            $idgame = 20 * $pageid;
+        }
+
+        for ($i = $idgame; $i < $idgame+20; $i++) {
             $client = ClientBuilder::create()->build();
             $params = [
                 'index' => 'steam',
@@ -22,6 +27,6 @@ class SteamGame extends AbstractController
             array_push($games, $response);
         };
 
-        return $this->render('steam/steamgamelist.html.twig', ['games' => $games]);
+        return $games;
     }
 }

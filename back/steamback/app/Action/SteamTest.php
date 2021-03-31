@@ -6,7 +6,7 @@ namespace App\Action;
 use App\Core\Controller\AbstractController;
 use Elasticsearch\ClientBuilder;
 
-class SteamGame extends AbstractController
+class SteamTest extends AbstractController
 {
     public function __invoke()
     {
@@ -21,7 +21,8 @@ class SteamGame extends AbstractController
             $response = $client->get($params);
             array_push($games, $response);
         };
+        print_r($games);
 
-        return $this->render('steam/steamgamelist.html.twig', ['games' => $games]);
+        return $this->render('steam/steamtest.html.twig', ['games' => $games]);
     }
 }
