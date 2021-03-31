@@ -21,7 +21,7 @@ class SteamTest extends AbstractController
             $response = $client->get($params);
             array_push($games, $response);
         };
-        print_r($games);
+
 
         return $this->render('steam/steamtest.html.twig', ['games' => $games]);
     }
