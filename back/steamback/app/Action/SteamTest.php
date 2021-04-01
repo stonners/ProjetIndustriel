@@ -11,7 +11,6 @@ class SteamTest extends AbstractController
     public function __invoke()
     {
         $games = [];
-        $test = [];
         for ($i = 1; $i < 100; $i++) {
             $client = ClientBuilder::create()->build();
             $params = [
@@ -19,9 +18,27 @@ class SteamTest extends AbstractController
                 'id' => $i
             ];
             $response = $client->get($params);
-            array_push($games, $response);
-        };
 
+            print_r($response['_source']['appid']);
+            $paramsimg=[
+                'index' => 'steam_media_data',
+                'body' => [
+                    'query' => [
+                        'match' => [
+                            'steam_appid' => $response['_source']['appid']
+                        ]
+                    ]
+                ]
+            ];
+
+            $img = $client->search($paramsimg);
+            $game = ['appid' =>$response['_source']['appid'],
+                'name' => $response['_source']['name'],
+                'publisher'=>$response['_source']['publisher'],
+                'header_image'=>$img['hits']['hits'][0]['_source']['header_image']
+                ];
+            array_push($games, $game);
+        };
 
         return $this->render('steam/steamtest.html.twig', ['games' => $games]);
     }

@@ -24,7 +24,25 @@ class GamesManager
                 'id' => $i
             ];
             $response = $client->get($params);
-            array_push($games, $response);
+
+            $paramsimg=[
+                'index' => 'steam_media_data',
+                'body' => [
+                    'query' => [
+                        'match' => [
+                            'steam_appid' => $response['_source']['appid']
+                        ]
+                    ]
+                ]
+            ];
+
+            $img = $client->search($paramsimg);
+            $game = ['appid' =>$response['_source']['appid'],
+                'name' => $response['_source']['name'],
+                'publisher'=>$response['_source']['publisher'],
+                'header_image'=>$img['hits']['hits'][0]['_source']['header_image']
+            ];
+            array_push($games, $game);
         };
 
         return $games;

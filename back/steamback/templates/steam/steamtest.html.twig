@@ -20,11 +20,11 @@
             <tbody>
             {% for game in games %}
                 <tr>
-                    <th scope="row">{{ game._source.appid }}</th>
+                    <th scope="row">{{ game.appid }}</th>
                     <td>{{ game._source.name }}</td>
-                    <td>{{ game._source.release_date }}</td>
-                    <td>{{ game._source.platforms }}</td>
-                    <td>{{ game._source.genres }}</td>
+                    <td>{{ game.header_image }}</td>
+                    <td>{{ game.publisher }}</td>
+                    <td>{{ game.publisher }}</td>
                 </tr>
             {% endfor %}
             </tbody>
