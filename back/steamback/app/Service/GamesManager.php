@@ -47,4 +47,9 @@ class GamesManager
 
         return $games;
     }
+
+    public function getGame($appid){
+
+
+    }
 }
