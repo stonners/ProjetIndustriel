@@ -39,6 +39,7 @@ class SteamTest extends AbstractController
 //                ];
 //            array_push($games, $game);
 //        };
+
         $client = ClientBuilder::create()->build();
         $params=[
                 'index' => 'steam',
@@ -50,9 +51,66 @@ class SteamTest extends AbstractController
                     ]
                 ]
             ];
-        $response = $client->search($params);
+        $gameinfo = $client->search($params);
 
-        print_r($response);
+        $paramsdescription=[
+            'index' => 'steam_description_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => 10
+                    ]
+                ]
+            ]
+        ];
+        $gamedescription = $client->search($paramsdescription);
+
+        $paramsmedia=[
+            'index' => 'steam_media_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => 10
+                    ]
+                ]
+            ]
+        ];
+        $gamemedia = $client->search($paramsmedia);
+
+        $paramsrequirement=[
+            'index' => 'steam_requirements_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => 10
+                    ]
+                ]
+            ]
+        ];
+        $gamerequirements = $client->search($paramsrequirement);
+
+        $paramssupportinfo=[
+            'index' => 'steam_support_info',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => 10
+                    ]
+                ]
+            ]
+        ];
+        $gamesupportinfo = $client->search($paramssupportinfo);
+
+
+        $game = [
+            'steam' => $gameinfo['hits']['hits'][0]['_source'],
+            'description' => $gamedescription['hits']['hits'][0]['_source'],
+            'media' => $gamemedia['hits']['hits'][0]['_source'],
+            'requirements' => $gamerequirements['hits']['hits'][0]['_source'],
+            'support' => $gamesupportinfo['hits']['hits'][0]['_source']
+            ];
+
+        print_r($game);
 
         return $this->render('steam/steamtest.html.twig', ['games' => $games]);
     }

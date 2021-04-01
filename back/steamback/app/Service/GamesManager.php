@@ -49,7 +49,77 @@ class GamesManager
     }
 
     public function getGame($appid){
+        $client = ClientBuilder::create()->build();
+        $params=[
+            'index' => 'steam',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'appid' => $appid
+                    ]
+                ]
+            ]
+        ];
+        $gameinfo = $client->search($params);
 
+        $paramsdescription=[
+            'index' => 'steam_description_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => $appid
+                    ]
+                ]
+            ]
+        ];
+        $gamedescription = $client->search($paramsdescription);
+
+        $paramsmedia=[
+            'index' => 'steam_media_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => $appid
+                    ]
+                ]
+            ]
+        ];
+        $gamemedia = $client->search($paramsmedia);
+
+        $paramsrequirement=[
+            'index' => 'steam_requirements_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => $appid
+                    ]
+                ]
+            ]
+        ];
+        $gamerequirements = $client->search($paramsrequirement);
+
+        $paramssupportinfo=[
+            'index' => 'steam_support_info',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'steam_appid' => $appid
+                    ]
+                ]
+            ]
+        ];
+        $gamesupportinfo = $client->search($paramssupportinfo);
+
+
+        $game = [
+            'steam' => $gameinfo['hits']['hits'][0]['_source'],
+            'description' => $gamedescription['hits']['hits'][0]['_source'],
+            'media' => $gamemedia['hits']['hits'][0]['_source'],
+            'requirements' => $gamerequirements['hits']['hits'][0]['_source'],
+            'support' => $gamesupportinfo['hits']['hits'][0]['_source']
+        ];
+
+        return $game;
 
     }
 }

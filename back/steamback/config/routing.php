@@ -7,6 +7,7 @@ use App\Action\SteamGame;
 use App\Action\SteamTest;
 
 use App\Action\API\GetFirstsGames;
+use App\Action\API\GetGame;
 
 return [
     new Route('/', Home::class, 'GET'),
@@ -15,5 +16,6 @@ return [
     new Route('/steamtest', SteamTest::class, 'GET'),
 
     new Route('/api/getfirstgames', GetFirstsGames::class, 'GET'),
+    new Route('/api/game', GetGame::class, 'GET'),
 ];
 
