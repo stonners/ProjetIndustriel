@@ -101,16 +101,28 @@ class SteamTest extends AbstractController
         ];
         $gamesupportinfo = $client->search($paramssupportinfo);
 
+        $paramstag=[
+            'index' => 'steam_tag_data',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'appid' => 10
+                    ]
+                ]
+            ]
+        ];
+        $gametags = array_keys($client->search($paramstag)['hits']['hits'][0]['_source'], !0);
+        array_shift($gametags);
 
         $game = [
             'steam' => $gameinfo['hits']['hits'][0]['_source'],
             'description' => $gamedescription['hits']['hits'][0]['_source'],
             'media' => $gamemedia['hits']['hits'][0]['_source'],
             'requirements' => $gamerequirements['hits']['hits'][0]['_source'],
-            'support' => $gamesupportinfo['hits']['hits'][0]['_source']
+            'support' => $gamesupportinfo['hits']['hits'][0]['_source'],
+            'tags' => $gametags
             ];
 
-        print_r($game);
 
         return $this->render('steam/steamtest.html.twig', ['games' => $games]);
     }
