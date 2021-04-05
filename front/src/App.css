@@ -1,9 +1,30 @@
-.App {
-
+.switchView{
+  margin: 1rem 1rem 0 0;
+  font-size: 20px;
 }
+
+.switchView>button{
+  margin-bottom: .2rem;
+}
+
+.switchView>span{
+  margin: 0 .5rem 0 .5rem;
+}
+
+.modalConnexion{
+}
+
+.User-logo{
+  background-color: #30333b;
+  border-radius: 50%;
+  overflow: hidden;
+  font-size: 2.2rem;
+}
+
 
 .headerLogos{
   border-bottom: solid;
+  display: inline-flex;
   width: 100%;
   height: 100%;
 }

@@ -1,56 +1,58 @@
 import logo from './logo.svg'
 import './App.css';
-import { Button, Col, Input, Row, Space, Table } from "antd";
+import { Input, Space, Table, Switch, Modal } from "antd";
 import "antd/dist/antd.css";
 import { UserOutlined, BarsOutlined, AppstoreOutlined } from '@ant-design/icons'
+import TextTheme from './Themes/TextTheme'
+import { useState } from 'react'
+import ImageTheme from './Themes/ImageTheme'
+import Connexion from './Connexion'
 
 
 const { Search } = Input;
-
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-  },
-];
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
+const check = true;
 
 
 function App() {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const [displayMode, setDisplayMode] = useState('text');
+
+  const modeChange = () => {
+    if (displayMode === 'image') {
+      setDisplayMode('text')
+    }
+    else {
+      setDisplayMode('image')
+    }
+    // console.log(displayMode)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <div className="headerLogos">
           <img src={logo} className="App-logo" alt="logo" />
-          <UserOutlined className="User-logo" />
+          <a onClick={showModal}>
+            <UserOutlined className="User-logo" />
+          </a>
         </div>
       </header>
       <body>
+
         <div className="SearchBar">
           <Space direction="vertical">
             <Search
@@ -61,15 +63,21 @@ function App() {
             />
           </Space>
           <br />
-          <a>
+          <div className="switchView">
             <BarsOutlined />
-          </a>
-          <a>
+            <Switch onChange={modeChange} />
             <AppstoreOutlined />
-          </a>
+          </div>
         </div>
-
-        <Table dataSource={dataSource} columns={columns} />;
+        {displayMode === 'text' ? <TextTheme /> : <ImageTheme />}
+        <div className="modalConnexion">
+          <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Space direction="vertical">
+              <Input placeholder="Enter your username" />
+              <Input.Password placeholder="Enter your password" />
+            </Space>
+          </Modal>
+        </div>
       </body>
     </div>
 
