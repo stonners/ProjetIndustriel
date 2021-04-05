@@ -111,8 +111,32 @@ class SteamTest extends AbstractController
                 ]
             ]
         ];
-        $gametags = array_keys($client->search($paramstag)['hits']['hits'][0]['_source'], !0);
+        $tags = $client->search($paramstag)['hits']['hits'][0]['_source'];
+        $gametags = array_keys($tags, !0);
+
         array_shift($gametags);
+        array_shift($tags);
+
+        $alltagsname = array_keys($tags);
+
+        $compteur=0;
+        $moyenne=0;
+
+        foreach ($gametags as $gametag){
+            $moyenne = $moyenne + $tags[$gametag];
+            $compteur++;
+        }
+        $moyenne= $moyenne/$compteur;
+
+        $compteur=0;
+        $tagsofgame=[];
+
+        foreach ($tags as $tag){
+            if ($tag >= $moyenne){
+                array_push($tagsofgame, $alltagsname[$compteur]);
+            }
+            $compteur++;
+        }
 
         $game = [
             'steam' => $gameinfo['hits']['hits'][0]['_source'],
@@ -120,7 +144,7 @@ class SteamTest extends AbstractController
             'media' => $gamemedia['hits']['hits'][0]['_source'],
             'requirements' => $gamerequirements['hits']['hits'][0]['_source'],
             'support' => $gamesupportinfo['hits']['hits'][0]['_source'],
-            'tags' => $gametags
+            'tags' => $tagsofgame
             ];
 
 
